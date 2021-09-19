@@ -7,9 +7,23 @@
     background-color: #66b0f1;
     border-radius: 40px;
     color: black;
-    margin-bottom: 270px;
+    margin-bottom: 50px;
 }
 .mb-2{
     border-radius: 40px;
-    
+   
+}
+
+.cardOutput{
+    margin-right: 600px;
+    /* margin-top: 50px; */
+    margin-left: 120px;
+
+     float: right;
+     /* padding: 10px; */
+     box-sizing: content-box;
+     background-color: #F8BBD0;
+     /* border-radius: 10px; */
+     color: black;
+     /* margin-bottom: 270px; */
 }
