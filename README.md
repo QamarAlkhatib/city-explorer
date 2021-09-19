@@ -20,7 +20,8 @@ Things I've used:
 - API IQ [read the documentation](https://locationiq.com/docs#search-forward-geocoding).
 
 ## Change Log
-Name of feature: ________________________________
+
+Name of feature: Adding 
 
 Estimate of time needed to complete: _____
 
