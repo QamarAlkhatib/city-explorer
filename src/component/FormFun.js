@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Row, Col, Button, Card } from 'react-bootstrap/'
+import { Form, Row, Col, Button, Card, Alert } from 'react-bootstrap/'
 import './css/header.css'
 import './css/FormFun.css'
 import axios from 'axios';
@@ -13,7 +13,8 @@ class FormFun extends React.Component {
             searchQuery: '',
             locationResult: {},
             showLocInfo: false,
-            errorMess: false
+            errorMess: false,
+          
         }
     }
 
@@ -23,6 +24,8 @@ class FormFun extends React.Component {
         await this.setState({
             searchQuery: event.target.city.value
         });
+
+       
         // console.log(this.state.searchQuery);
         try {
             let reqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&q=${this.state.searchQuery}&format=json`;
@@ -35,17 +38,30 @@ class FormFun extends React.Component {
             this.setState({
                 locationResult: locResult.data[0],
                 showLocInfo: true,
-                errorMess: false
+                errorMess: false,
+              
+
             })
         } catch {
+            if(this.state.searchQuery === ' '){
+            
+            
             console.log("something went wrong");
             this.setState({
                 showLocInfo: false,
                 errorMess: true,
-
+                
             });
+        }
 
         }
+    }
+
+
+    handleClose = () => {
+        this.setState({
+            errorMess: false
+        })
     }
 
 
@@ -64,6 +80,8 @@ class FormFun extends React.Component {
                                 className="mb-2"
                                 id="inlineFormInput"
                                 placeholder="Enter City Name"
+                                required
+                                
                             />
                         </Col>
                         <Col xs="auto">
@@ -93,12 +111,24 @@ class FormFun extends React.Component {
 
                                 </Card.Text>
                             </Card.Body>
-
                         </Card>
-
-
                     </>
                 }
+
+                {this.state.errorMess &&
+
+                    <Alert variant="danger" onClose={this.handleClose} dismissible style={{ width: 'auto' }}>
+                        <Alert.Heading>Oh snap! You got an error! 😨</Alert.Heading>
+                        <p>
+                        You probably Misspelling the city name, What about London?
+                        </p>
+                    </Alert>
+                }
+               
+
+
+
+
 
             </div>
         )
