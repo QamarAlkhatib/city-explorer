@@ -72,7 +72,7 @@ class FormFun extends React.Component {
                 {this.state.showLocInfo &&
                     <>
                         <Card style={{ width: '18rem' }} className="cardOutput">
-                            <Card.Img variant="top" src={`https://maps.locationiq.com/v3/staticmap?key=f5de8e48adbdc6&center=${this.state.locationResult.lat},${this.state.locationResult.lon}&zoom=10`} alt="city" />
+                            <Card.Img variant="top" src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&=${this.state.locationResult.lat},${this.state.locationResult.lon}&zoom=10`} alt="city" />
                             <Card.Body>
                                 <Card.Title>City Name: {this.state.searchQuery} 🗺️</Card.Title>
                                 <Card.Text>
