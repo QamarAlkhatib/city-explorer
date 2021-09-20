@@ -13,7 +13,7 @@ class FormFun extends React.Component {
             searchQuery: '',
             locationResult: {},
             showLocInfo: false,
-           
+            errorMess: false
         }
     }
 
@@ -24,22 +24,30 @@ class FormFun extends React.Component {
             searchQuery: event.target.city.value
         });
         // console.log(this.state.searchQuery);
+        try {
+            let reqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&q=${this.state.searchQuery}&format=json`;
 
-        let reqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&q=${this.state.searchQuery}&format=json`;
+            let locResult = await axios.get(reqUrl);
+            // console.log("data", locResult);
+            // console.log("datssa", locResult.data);
+            // console.log("datssa", locResult.data[0]);
 
-        let locResult = await axios.get(reqUrl);
-        // console.log("data", locResult);
-        // console.log("datssa", locResult.data);
-        // console.log("datssa", locResult.data[0]);
+            this.setState({
+                locationResult: locResult.data[0],
+                showLocInfo: true,
+                errorMess: false
+            })
+        } catch {
+            console.log("something went wrong");
+            this.setState({
+                showLocInfo: false,
+                errorMess: true,
 
+            });
 
-
-        this.setState({
-            locationResult: locResult.data[0],
-            showLocInfo: true
-        })
+        }
     }
- 
+
 
     render() {
         return (
@@ -85,9 +93,9 @@ class FormFun extends React.Component {
 
                                 </Card.Text>
                             </Card.Body>
-                            
+
                         </Card>
-                      
+
 
                     </>
                 }
