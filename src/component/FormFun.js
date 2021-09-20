@@ -14,7 +14,7 @@ class FormFun extends React.Component {
             locationResult: {},
             showLocInfo: false,
             errorMess: false,
-          
+            wethDataInfo: {}
         }
     }
 
@@ -25,7 +25,7 @@ class FormFun extends React.Component {
             searchQuery: event.target.city.value
         });
 
-       
+
         // console.log(this.state.searchQuery);
         try {
             let reqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&q=${this.state.searchQuery}&format=json`;
@@ -39,20 +39,20 @@ class FormFun extends React.Component {
                 locationResult: locResult.data[0],
                 showLocInfo: true,
                 errorMess: false,
-              
+
 
             })
         } catch {
-            if(this.state.searchQuery === ' '){
-            
-            
-            console.log("something went wrong");
-            this.setState({
-                showLocInfo: false,
-                errorMess: true,
-                
-            });
-        }
+            if (this.state.searchQuery === ' ') {
+
+
+                console.log("something went wrong");
+                this.setState({
+                    showLocInfo: false,
+                    errorMess: true,
+
+                });
+            }
 
         }
     }
@@ -64,6 +64,14 @@ class FormFun extends React.Component {
         })
     }
 
+    getData = async () => {
+        let reqUrl = `${process.env.REACT_APP_SERVER_LINK}/weather?cityname=Seattle&timezone=America/Los_Angeles&description=Light rain&date=2021-03-25`;
+        let weathData = await axios.get(reqUrl);
+
+        this.setState({
+            wethDataInfo: weathData.data
+        })
+    }
 
     render() {
         return (
@@ -81,7 +89,7 @@ class FormFun extends React.Component {
                                 id="inlineFormInput"
                                 placeholder="Enter City Name"
                                 required
-                                
+
                             />
                         </Col>
                         <Col xs="auto">
@@ -93,6 +101,15 @@ class FormFun extends React.Component {
                     </Row>
 
                 </Form>
+                <p>City name: {this.state.wethDataInfo.city_name}</p>
+                <p>TimeZone: {this.state.wethDataInfo.timezone}</p>
+                {/* <p>description: {this.state.wethDataInfo.description}</p>
+                <p>date: {this.state.wethDataInfo.date}</p> */}
+
+                <Button onClick={this.getData} variant="success">
+                    Click me
+                </Button>
+
 
 
                 {this.state.showLocInfo &&
@@ -120,11 +137,11 @@ class FormFun extends React.Component {
                     <Alert variant="danger" onClose={this.handleClose} dismissible style={{ width: 'auto' }}>
                         <Alert.Heading>Oh snap! You got an error! 😨</Alert.Heading>
                         <p>
-                        You probably Misspelling the city name, What about London?
+                            You probably Misspelling the city name, What about London?
                         </p>
                     </Alert>
                 }
-               
+
 
 
 
