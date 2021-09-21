@@ -34,18 +34,17 @@ class FormFun extends React.Component {
             // console.log("data", locResult);
             // console.log("datssa", locResult.data);
             // console.log("datssa", locResult.data[0]);
-
+            let newReqUrl = `${process.env.REACT_APP_SERVER_LINK}/weather?cityname=${this.state.searchQuery}`;
+            let weathData = await axios.get(newReqUrl);
+            console.log(weathData);
             this.setState({
                 locationResult: locResult.data[0],
                 showLocInfo: true,
                 errorMess: false,
-
-
+                wethDataInfo: weathData.data
             })
         } catch {
             if (this.state.searchQuery === ' ') {
-
-
                 console.log("something went wrong");
                 this.setState({
                     showLocInfo: false,
@@ -64,14 +63,15 @@ class FormFun extends React.Component {
         })
     }
 
-    getData = async () => {
-        let reqUrl = `${process.env.REACT_APP_SERVER_LINK}/weather?cityname=Seattle&timezone=America/Los_Angeles&description=Light rain&date=2021-03-25`;
-        let weathData = await axios.get(reqUrl);
+    // getData = async () => {
+    //     let reqUrl = `${process.env.REACT_APP_SERVER_LINK}/weather?cityname=${this.state.searchQuery}`;
+    //     let weathData = await axios.get(reqUrl);
 
-        this.setState({
-            wethDataInfo: weathData.data
-        })
-    }
+    //     this.setState({
+    //         wethDataInfo: weathData.data
+    //     })
+    //     console.log(this.state.wethDataInfo);
+    // }
 
     render() {
         return (
@@ -101,15 +101,6 @@ class FormFun extends React.Component {
                     </Row>
 
                 </Form>
-                <p>City name: {this.state.wethDataInfo.city_name}</p>
-                <p>TimeZone: {this.state.wethDataInfo.timezone}</p>
-                {/* <p>description: {this.state.wethDataInfo.description}</p>
-                <p>date: {this.state.wethDataInfo.date}</p> */}
-
-                <Button onClick={this.getData} variant="success">
-                    Click me
-                </Button>
-
 
 
                 {this.state.showLocInfo &&
@@ -125,13 +116,24 @@ class FormFun extends React.Component {
                                     latitude: {this.state.locationResult.lat}
                                     <br></br>
                                     longitude: {this.state.locationResult.lon}
+                                    <br></br>
+                                    
+                                    Description: {this.state.wethDataInfo[0].desc}
+                                    <br></br>
+                                    Date: {this.state.wethDataInfo[0].date}
+
+                                    <br></br>
+                                    high_temp: {this.state.wethDataInfo[0].highTemp}
+                                    <br></br>
+                                    low_temp: {this.state.wethDataInfo[0].lowTemp}
+
 
                                 </Card.Text>
                             </Card.Body>
                         </Card>
                     </>
-                }
-
+                } 
+                
                 {this.state.errorMess &&
 
                     <Alert variant="danger" onClose={this.handleClose} dismissible style={{ width: 'auto' }}>
@@ -142,10 +144,15 @@ class FormFun extends React.Component {
                     </Alert>
                 }
 
+                {/* 
+                <p>City name: {this.state.searchQuery}</p>
+                <p>Description: {this.state.wethDataInfo.description}</p>
+                <p>high_temp: {this.state.wethDataInfo.high_temp}</p>
+                <p>low_temp: {this.state.wethDataInfo.low_temp}</p>
 
-
-
-
+                <Button onClick={this.getData} variant="success">
+                    Click me
+                </Button> */}
 
             </div>
         )
