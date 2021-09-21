@@ -14,7 +14,8 @@ class FormFun extends React.Component {
             locationResult: {},
             showLocInfo: false,
             errorMess: false,
-            wethDataInfo: {}
+            wethDataInfo: {},
+            showWethData: false
         }
     }
 
@@ -36,13 +37,14 @@ class FormFun extends React.Component {
             // console.log("datssa", locResult.data[0]);
             let newReqUrl = `${process.env.REACT_APP_SERVER_LINK}/weather?cityname=${this.state.searchQuery}`;
             let weathData = await axios.get(newReqUrl);
-            console.log(weathData);
+
             this.setState({
                 locationResult: locResult.data[0],
                 showLocInfo: true,
                 errorMess: false,
                 wethDataInfo: weathData.data
             })
+
         } catch {
             if (this.state.searchQuery === ' ') {
                 console.log("something went wrong");
@@ -52,8 +54,16 @@ class FormFun extends React.Component {
 
                 });
             }
-
         }
+        // if (this.state.wethDataInfo.cityname === this.state.searchQuery) {
+        //     let newReqUrl = `${process.env.REACT_APP_SERVER_LINK}/weather?cityname=${this.state.searchQuery}`;
+        //     let weathData = await axios.get(newReqUrl);
+        //     this.setState({
+        //         showWethData: true,
+        //         wethDataInfo: weathData.data
+
+        //     })
+        // }
     }
 
 
@@ -64,13 +74,16 @@ class FormFun extends React.Component {
     }
 
     // getData = async () => {
-    //     let reqUrl = `${process.env.REACT_APP_SERVER_LINK}/weather?cityname=${this.state.searchQuery}`;
-    //     let weathData = await axios.get(reqUrl);
+    //     let newReqUrl = `${process.env.REACT_APP_SERVER_LINK}/weather?cityname=${this.state.searchQuery}`;
+    //     let weathData = await axios.get(newReqUrl);
 
-    //     this.setState({
-    //         wethDataInfo: weathData.data
-    //     })
-    //     console.log(this.state.wethDataInfo);
+    //     if (this.state.searchQuery === 'Amman' || this.state.searchQuery === 'Seattle' || this.state.searchQuery === 'Paris') {
+    //         this.setState({
+    //             showWethData: true,
+    //             wethDataInfo: weathData.data
+    //         });
+    //     }
+
     // }
 
     render() {
@@ -112,12 +125,11 @@ class FormFun extends React.Component {
                                 <Card.Text>
                                     Display Name: {this.state.locationResult.display_name}
                                     <br></br>
-
                                     latitude: {this.state.locationResult.lat}
                                     <br></br>
                                     longitude: {this.state.locationResult.lon}
                                     <br></br>
-                                    
+
                                     Description: {this.state.wethDataInfo[0].desc}
                                     <br></br>
                                     Date: {this.state.wethDataInfo[0].date}
@@ -132,8 +144,8 @@ class FormFun extends React.Component {
                             </Card.Body>
                         </Card>
                     </>
-                } 
-                
+                }
+
                 {this.state.errorMess &&
 
                     <Alert variant="danger" onClose={this.handleClose} dismissible style={{ width: 'auto' }}>
@@ -143,16 +155,16 @@ class FormFun extends React.Component {
                         </p>
                     </Alert>
                 }
+                {/* <>
+                    Description: {this.state.wethDataInfo[0].desc}
+                    <br></br>
+                    Date: {this.state.wethDataInfo[0].date}
 
-                {/* 
-                <p>City name: {this.state.searchQuery}</p>
-                <p>Description: {this.state.wethDataInfo.description}</p>
-                <p>high_temp: {this.state.wethDataInfo.high_temp}</p>
-                <p>low_temp: {this.state.wethDataInfo.low_temp}</p>
-
-                <Button onClick={this.getData} variant="success">
-                    Click me
-                </Button> */}
+                    <br></br>
+                    high_temp: {this.state.wethDataInfo[0].highTemp}
+                    <br></br>
+                    low_temp: {this.state.wethDataInfo[0].lowTemp}
+                </> */}
 
             </div>
         )
