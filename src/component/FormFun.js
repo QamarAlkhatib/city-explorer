@@ -3,7 +3,8 @@ import { Form, Row, Col, Button, Card, Alert } from 'react-bootstrap/'
 import './css/header.css'
 import './css/FormFun.css'
 import axios from 'axios';
-
+import WeatherInfo from './WeathInfo.js'
+import LocationInfo from './LocationInfo';
 
 class FormFun extends React.Component {
 
@@ -35,18 +36,18 @@ class FormFun extends React.Component {
             // console.log("data", locResult);
             // console.log("datssa", locResult.data);
             // console.log("datssa", locResult.data[0]);
-            let newReqUrl = `${process.env.REACT_APP_SERVER_LINK}/weather?cityname=${this.state.searchQuery}`;
-            let weathData = await axios.get(newReqUrl);
+
 
             this.setState({
                 locationResult: locResult.data[0],
                 showLocInfo: true,
                 errorMess: false,
-                wethDataInfo: weathData.data
+
             })
 
+            console.log(this.state.wethDataInfo);
         } catch {
-            if (this.state.searchQuery === ' ') {
+            if (this.state.searchQuery === ' ' || this.state.searchQuery === ',' || this.state.searchQuery === '.') {
                 console.log("something went wrong");
                 this.setState({
                     showLocInfo: false,
@@ -55,17 +56,24 @@ class FormFun extends React.Component {
                 });
             }
         }
-        // if (this.state.wethDataInfo.cityname === this.state.searchQuery) {
-        //     let newReqUrl = `${process.env.REACT_APP_SERVER_LINK}/weather?cityname=${this.state.searchQuery}`;
-        //     let weathData = await axios.get(newReqUrl);
-        //     this.setState({
-        //         showWethData: true,
-        //         wethDataInfo: weathData.data
 
-        //     })
-        // }
+        this.getData();
     }
 
+
+    getData = async () => {
+        console.log("dhjsklhd");
+        let newReqUrl = `https://city-explorer-class07.herokuapp.com/weather?city=${this.state.searchQuery}`;
+        let weathData = await axios.get(newReqUrl);
+        console.log(newReqUrl);
+        console.log(weathData);
+
+        this.setState({
+            showWethData: true,
+            wethDataInfo: weathData.data
+        });
+        console.log(this.state.wethDataInfo);
+    }
 
     handleClose = () => {
         this.setState({
@@ -73,18 +81,7 @@ class FormFun extends React.Component {
         })
     }
 
-    // getData = async () => {
-    //     let newReqUrl = `${process.env.REACT_APP_SERVER_LINK}/weather?cityname=${this.state.searchQuery}`;
-    //     let weathData = await axios.get(newReqUrl);
 
-    //     if (this.state.searchQuery === 'Amman' || this.state.searchQuery === 'Seattle' || this.state.searchQuery === 'Paris') {
-    //         this.setState({
-    //             showWethData: true,
-    //             wethDataInfo: weathData.data
-    //         });
-    //     }
-
-    // }
 
     render() {
         return (
@@ -118,31 +115,10 @@ class FormFun extends React.Component {
 
                 {this.state.showLocInfo &&
                     <>
-                        <Card style={{ width: '18rem' }} className="cardOutput">
-                            <Card.Img variant="top" src={`https://maps.locationiq.com/v3/staticmap?key=f5de8e48adbdc6&center=${this.state.locationResult.lat},${this.state.locationResult.lon}&zoom=10`} alt="city" />
-                            <Card.Body>
-                                <Card.Title>City Name: {this.state.searchQuery} 🗺️</Card.Title>
-                                <Card.Text>
-                                    Display Name: {this.state.locationResult.display_name}
-                                    <br></br>
-                                    latitude: {this.state.locationResult.lat}
-                                    <br></br>
-                                    longitude: {this.state.locationResult.lon}
-                                    <br></br>
 
-                                    Description: {this.state.wethDataInfo[0].desc}
-                                    <br></br>
-                                    Date: {this.state.wethDataInfo[0].date}
-
-                                    <br></br>
-                                    high_temp: {this.state.wethDataInfo[0].highTemp}
-                                    <br></br>
-                                    low_temp: {this.state.wethDataInfo[0].lowTemp}
+                        <LocationInfo searchQuery={this.state.searchQuery} displayName={this.state.locationResult.display_name} lat={this.state.locationResult.lat} lon={this.state.locationResult.lon} />
 
 
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
                     </>
                 }
 
@@ -155,16 +131,21 @@ class FormFun extends React.Component {
                         </p>
                     </Alert>
                 }
-                {/* <>
-                    Description: {this.state.wethDataInfo[0].desc}
-                    <br></br>
-                    Date: {this.state.wethDataInfo[0].date}
 
-                    <br></br>
-                    high_temp: {this.state.wethDataInfo[0].highTemp}
-                    <br></br>
-                    low_temp: {this.state.wethDataInfo[0].lowTemp}
-                </> */}
+                {this.state.showWethData &&
+                    <>
+                        {this.state.wethDataInfo.map((value, key) => {
+                            return (
+                                <>
+                                    <WeatherInfo key={key.date} city={this.state.searchQuery} description={value.description} date={value.date} />
+                                </>
+                            )
+                        })
+                        }
+
+
+                    </>
+                }
 
             </div>
         )
