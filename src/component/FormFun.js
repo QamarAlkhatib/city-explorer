@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Row, Col, Button, Card, Alert } from 'react-bootstrap/'
+import { Form, Row, Col, Button, Alert } from 'react-bootstrap/'
 import './css/header.css'
 import './css/FormFun.css'
 import axios from 'axios';
