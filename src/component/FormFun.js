@@ -1,9 +1,11 @@
 import React from 'react'
-import { Form, Row, Col, Button } from 'react-bootstrap/'
+import { Form, Row, Col, Button, Alert } from 'react-bootstrap/'
 import './css/header.css'
 import './css/FormFun.css'
 import axios from 'axios';
-
+import WeatherInfo from './WeathInfo.js'
+import LocationInfo from './LocationInfo.js';
+import MovieInfo from './MovieInfo.js'
 
 class FormFun extends React.Component {
 
@@ -13,8 +15,11 @@ class FormFun extends React.Component {
             searchQuery: '',
             locationResult: {},
             showLocInfo: false,
-            lon: "",
-            lat: ""
+            errorMess: false,
+            wethDataInfo: {},
+            showWethData: false,
+            movieData: {},
+            showMovieData: false
         }
     }
 
@@ -24,32 +29,71 @@ class FormFun extends React.Component {
         await this.setState({
             searchQuery: event.target.city.value
         });
-        console.log(this.state.searchQuery);
-
-        let reqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&q=${this.state.searchQuery}&format=json`;
-
-        let locResult = await axios.get(reqUrl);
-        console.log("data", locResult);
-        console.log("datssa", locResult.data);
-        console.log("datssa", locResult.data[0]);
 
 
+        // console.log(this.state.searchQuery);
+        try {
+            let reqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&q=${this.state.searchQuery}&format=json`;
+
+            let locResult = await axios.get(reqUrl);
+            this.setState({
+                locationResult: locResult.data[0],
+                showLocInfo: true,
+                errorMess: false,
+
+            })
+
+            console.log(this.state.wethDataInfo);
+            this.getData();
+            this.getMovieData();
+        } catch {
+            if (this.state.searchQuery === ' ' || this.state.searchQuery === ',' || this.state.searchQuery === '.') {
+                console.log("something went wrong");
+                this.setState({
+                    showLocInfo: false,
+                    errorMess: true,
+
+                });
+            }
+        }
+
+    }
+
+
+    getData = async () => {
+        console.log("weather data");
+        let newReqUrl = `https://city-explorer-class07.herokuapp.com/weather?city=${this.state.searchQuery}`;
+        let weathData = await axios.get(newReqUrl);
+        console.log(newReqUrl);
+        console.log(weathData);
 
         this.setState({
-            locationResult: locResult.data[0],
-            showLocInfo: true
-        })
-    }
-    onClick = async () => {
-        await this.setState({
-            showLocInfo: true,
-            searchQuery: this.state.searchQuery,
-            lat: this.state.locationResult.lat,
-            lon: this.state.locationResult.lon
-
+            showWethData: true,
+            wethDataInfo: weathData.data
         });
-        console.log("lat", this.state.lat);
+        // console.log(this.state.wethDataInfo);
+    }
 
+    getMovieData = async () => {
+        console.log("movieData");
+        let movieURL = `https://city-explorer-class07.herokuapp.com/getMovie?query=${this.state.searchQuery}`;
+        console.log("movie link", movieURL);
+
+        let movieDataResult = await axios.get(movieURL);
+
+        console.log(movieDataResult);
+        this.setState({
+            showMovieData: true,
+            movieData: movieDataResult.data
+        });
+        console.log("this is the movie data", this.state.movieData);
+
+    }
+
+    handleClose = () => {
+        this.setState({
+            errorMess: false
+        })
     }
 
     render() {
@@ -67,30 +111,70 @@ class FormFun extends React.Component {
                                 className="mb-2"
                                 id="inlineFormInput"
                                 placeholder="Enter City Name"
+                                required
                             />
                         </Col>
                         <Col xs="auto">
-                            
-                            <Button type="click" onClick={this.onClick} className="mb-2" variant="success">
+
+                            <Button type="submit" className="mb-2" variant="success">
                                 Explore!
                             </Button>
                         </Col>
                     </Row>
-                    
+
                 </Form>
+
+
+                {this.state.showLocInfo &&
+                    <>
+
+                        <LocationInfo searchQuery={this.state.searchQuery} displayName={this.state.locationResult.display_name} lat={this.state.locationResult.lat} lon={this.state.locationResult.lon} />
+
+                    </>
+                }
+
+                {this.state.errorMess &&
+
+                    <Alert variant="danger" onClose={this.handleClose} dismissible style={{ width: 'auto' }}>
+                        <Alert.Heading>Oh snap! You got an error! 😨</Alert.Heading>
+                        <p>
+                            You probably Misspelling the city name, What about London?
+                        </p>
+                    </Alert>
+                }
+
+                {this.state.showWethData &&
+                    <>
+                        {this.state.wethDataInfo.map((value, index) => {
+                            return (
+                                <>
+                                    <WeatherInfo key={index} city={this.state.searchQuery} description={value.description} date={value.date} />
+
+                                </>
+                            )
+                        })
+                        }
+
+
+                    </>
+                }
+
+                {this.state.showMovieData &&
+                    <>
+                        {this.state.movieData.map((value, index) => {
+                            return (
+
+                                <MovieInfo key={index} city={this.state.searchQuery} title={value.title} overview={value.overview}
+                                        avgvotes={value.avgvotes} votecount={value.votecount} imgUrl={value.imgUrl} popularity={value.popularity} released={value.released} />
+
+                            )
+                        })
+                        }
+
+
+                    </>
+                }
                
-                {/* 
-               {this.state.showLocInfo &&
-          <>
-            <p>City name: {this.state.searchQuery}</p>
-            <p>latitude: {this.state.locationResult.lat}</p>
-            <p>longitude: {this.state.locationResult.lon} </p>
-
-            <img src={`https://maps.locationiq.com/v3/staticmap?key=f5de8e48adbdc6&center=${this.state.locationResult.lat},${this.state.locationResult.lon}&zoom=10`} alt="city" />
-
-          </>
-        } */}
-
             </div>
         )
     }
