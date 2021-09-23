@@ -165,7 +165,7 @@ class FormFun extends React.Component {
                             return (
 
                                 <MovieInfo key={index} city={this.state.searchQuery} title={value.title} overview={value.overview}
-                                        avgvotes={value.avgvotes} votecount={value.votecount} imgUrl={value.imgUrl} popularity={value.popularity} released={value.released} />
+                                    avgvotes={value.avgvotes} votecount={value.votecount} imgUrl={value.imgUrl} popularity={value.popularity} released={value.released} />
 
                             )
                         })
@@ -174,7 +174,7 @@ class FormFun extends React.Component {
 
                     </>
                 }
-               
+
             </div>
         )
     }
