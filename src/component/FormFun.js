@@ -4,8 +4,8 @@ import './css/header.css'
 import './css/FormFun.css'
 import axios from 'axios';
 import WeatherInfo from './WeathInfo.js'
-import LocationInfo from './LocationInfo.js';
-import MovieInfo from './MovieInfo.js'
+import LocationInfo from './LocationInfo';
+import MovieInfo from './MovieInfo';
 
 class FormFun extends React.Component {
 
@@ -17,9 +17,7 @@ class FormFun extends React.Component {
             showLocInfo: false,
             errorMess: false,
             wethDataInfo: {},
-            showWethData: false,
-            movieData: {},
-            showMovieData: false
+            showWethData: false
         }
     }
 
@@ -36,6 +34,11 @@ class FormFun extends React.Component {
             let reqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&q=${this.state.searchQuery}&format=json`;
 
             let locResult = await axios.get(reqUrl);
+            // console.log("data", locResult);
+            // console.log("datssa", locResult.data);
+            // console.log("datssa", locResult.data[0]);
+
+
             this.setState({
                 locationResult: locResult.data[0],
                 showLocInfo: true,
@@ -44,8 +47,6 @@ class FormFun extends React.Component {
             })
 
             console.log(this.state.wethDataInfo);
-            this.getData();
-            this.getMovieData();
         } catch {
             if (this.state.searchQuery === ' ' || this.state.searchQuery === ',' || this.state.searchQuery === '.') {
                 console.log("something went wrong");
@@ -57,11 +58,12 @@ class FormFun extends React.Component {
             }
         }
 
+        this.getData();
     }
 
 
     getData = async () => {
-        console.log("weather data");
+        console.log("dhjsklhd");
         let newReqUrl = `https://city-explorer-class07.herokuapp.com/weather?city=${this.state.searchQuery}`;
         let weathData = await axios.get(newReqUrl);
         console.log(newReqUrl);
@@ -71,6 +73,7 @@ class FormFun extends React.Component {
             showWethData: true,
             wethDataInfo: weathData.data
         });
+
         // console.log(this.state.wethDataInfo);
     }
 
@@ -88,6 +91,9 @@ class FormFun extends React.Component {
         });
         console.log("this is the movie data", this.state.movieData);
 
+
+        console.log(this.state.wethDataInfo);
+
     }
 
     handleClose = () => {
@@ -95,6 +101,8 @@ class FormFun extends React.Component {
             errorMess: false
         })
     }
+
+
 
     render() {
         return (
@@ -112,6 +120,7 @@ class FormFun extends React.Component {
                                 id="inlineFormInput"
                                 placeholder="Enter City Name"
                                 required
+
                             />
                         </Col>
                         <Col xs="auto">
@@ -129,6 +138,7 @@ class FormFun extends React.Component {
                     <>
 
                         <LocationInfo searchQuery={this.state.searchQuery} displayName={this.state.locationResult.display_name} lat={this.state.locationResult.lat} lon={this.state.locationResult.lon} />
+
 
                     </>
                 }
@@ -159,6 +169,7 @@ class FormFun extends React.Component {
                     </>
                 }
 
+
                 {this.state.showMovieData &&
                     <>
                         {this.state.movieData.map((value, index) => {
@@ -166,14 +177,12 @@ class FormFun extends React.Component {
 
                                 <MovieInfo key={index} city={this.state.searchQuery} title={value.title} overview={value.overview}
                                     avgvotes={value.avgvotes} votecount={value.votecount} imgUrl={value.imgUrl} popularity={value.popularity} released={value.released} />
-
                             )
                         })
                         }
-
-
                     </>
                 }
+
 
             </div>
         )
