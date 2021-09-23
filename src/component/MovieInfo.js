@@ -4,36 +4,25 @@ class MovieInfo extends React.Component {
     render() {
         return (
             <div>
-                <div>
-                    <Card style={{ width: '250px', marginLeft: '50px', backgroundColor: '#E8EAF6', marginBottom: '50px', border: '2px solid black', float: 'right' }}>
-                        <Card.Header>Movie same as Name of {this.props.city}</Card.Header>
-                        <Card.Img variant="top" src={this.props.imgUrl} />
-                        <Card.Body>
-                            <Card.Title> </Card.Title>
-                            <Card.Text>
+                <div class="card mb-3" style={{ maxWidth: "340px" ,backgroundColor: '#9E9E9E', marginLeft:"350px",marginRright: '600px', float:'right',border:'2px solid black'}}>
+                    <div class="row no-gutters">
+                        <div class="col-md-4">
+                            <img src={this.props.imgUrl} class="card-img" alt="Image not found" />
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title"> Title: {this.props.title}</h5>
+                                <p class="card-text">Overview: {this.props.overview}</p>
+                                <p class="card-text"><small>Avarage Votes: <span style={{color:"#BF360C", fontWeight:"bold"}}> {this.props.avgvotes}</span></small></p>
+                                <p class="card-text"><small >Vote Count: <span style={{color:"#BF360C", fontWeight:"bold"}}> {this.props.votecount}</span>
+                                </small></p>
+                                <p class="card-text"><small >Popularity: <span style={{color:"#388E3C", fontWeight:"bold"}}> {this.props.popularity}</span></small></p>
+                                <p class="card-text"><small >Released: {this.props.released}</small></p>
 
-                                Title: {this.props.title}
-                                <br></br>
-                                Overview: {this.props.overview}
-                                <br></br>
-                                Avarage Votes: {this.props.avgvotes}
 
-                                <br></br>
-                                Vote Count: {this.props.votecount}
-
-                                <br></br>
-                                s
-                                {/* <img src={this.props.imgUrl} alt={this.props.title} /> */}
-
-                                <br></br>
-                                Popularity: {this.props.popularity}
-                                <br></br>
-
-                                Released: {this.props.Released}
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         )

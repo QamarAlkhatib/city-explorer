@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Row, Col, Button, Alert, Card } from 'react-bootstrap/'
+import { Form, Row, Col, Button, Alert } from 'react-bootstrap/'
 import './css/header.css'
 import './css/FormFun.css'
 import axios from 'axios';
@@ -77,14 +77,16 @@ class FormFun extends React.Component {
     getMovieData = async () => {
         console.log("movieData");
         let movieURL = `https://city-explorer-class07.herokuapp.com/getMovie?query=${this.state.searchQuery}`;
-        console.log(movieURL);
+        console.log("movie link", movieURL);
 
         let movieDataResult = await axios.get(movieURL);
+
+        console.log(movieDataResult);
         this.setState({
             showMovieData: true,
             movieData: movieDataResult.data
         });
-        console.log(this.state.movieData);
+        console.log("this is the movie data", this.state.movieData);
 
     }
 
@@ -143,10 +145,11 @@ class FormFun extends React.Component {
 
                 {this.state.showWethData &&
                     <>
-                        {this.state.wethDataInfo.map((value, key) => {
+                        {this.state.wethDataInfo.map((value, index) => {
                             return (
                                 <>
-                                    <WeatherInfo key={key.date} city={this.state.searchQuery} description={value.description} date={value.date} />
+                                    <WeatherInfo key={index} city={this.state.searchQuery} description={value.description} date={value.date} />
+
                                 </>
                             )
                         })
@@ -158,39 +161,12 @@ class FormFun extends React.Component {
 
                 {this.state.showMovieData &&
                     <>
-                        {this.state.movieData.map((value, key) => {
+                        {this.state.movieData.map((value, index) => {
                             return (
 
-                                <MovieInfo key={key.imgUrl} city={this.state.searchQuery} title={value.title} overview={value.overview}
-                                    avgvotes={value.avgvotes} votecount={value.votecount} imgUrl={value.imgUrl} popularity={value.popularity} released={value.released} />
-                                // <>
-                                //     <Card style={{ width: '250px', marginLeft: '50px', backgroundColor: '#39C0ED', marginBottom: '50px', border: '2px solid black', float: 'right' }}>
-                                //         <Card.Header>Movie with same as city Name: {this.props.city}</Card.Header>
-                                //         <Card.Body>
-                                //             <Card.Title> </Card.Title>
-                                //             <Card.Text>
+                                <MovieInfo key={index} city={this.state.searchQuery} title={value.title} overview={value.overview}
+                                        avgvotes={value.avgvotes} votecount={value.votecount} imgUrl={value.imgUrl} popularity={value.popularity} released={value.released} />
 
-                                //                 Title: {value.title}
-                                //                 <br></br>
-                                //                 Overview: {value.overview}
-                                //                 {/* <br></br>
-                                // Avarage Votes: {this.props.avgvotes}
-
-                                // <br></br>
-                                // Vote Count: {this.props.votecount}
-
-                                // <br></br>
-                                // <img src={this.props.imgUrl} alt={this.props.title} />
-
-                                // <br></br>
-                                // Popularity: {this.props.popularity}
-                                // <br></br>
-
-                                // Released: {this.props.Released} */}
-                                //             </Card.Text>
-                                //         </Card.Body>
-                                //     </Card>
-                                // </>
                             )
                         })
                         }
@@ -198,7 +174,7 @@ class FormFun extends React.Component {
 
                     </>
                 }
-
+               
             </div>
         )
     }
