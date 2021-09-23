@@ -30,11 +30,8 @@ class FormFun extends React.Component {
             searchQuery: event.target.city.value
         });
 
-
-        // console.log(this.state.searchQuery);
         try {
             let reqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&q=${this.state.searchQuery}&format=json`;
-
             let locResult = await axios.get(reqUrl);
             this.setState({
                 locationResult: locResult.data[0],
@@ -42,7 +39,6 @@ class FormFun extends React.Component {
                 errorMess: false,
 
             })
-
             console.log(this.state.wethDataInfo);
             this.getData();
             this.getMovieData();
@@ -71,7 +67,6 @@ class FormFun extends React.Component {
             showWethData: true,
             wethDataInfo: weathData.data
         });
-        // console.log(this.state.wethDataInfo);
     }
 
     getMovieData = async () => {
@@ -115,10 +110,7 @@ class FormFun extends React.Component {
                             />
                         </Col>
                         <Col xs="auto">
-
-                            <Button type="submit" className="mb-2" variant="success">
-                                Explore!
-                            </Button>
+                            <Button type="submit" className="mb-2" variant="success">  Explore! </Button>
                         </Col>
                     </Row>
 
@@ -127,9 +119,7 @@ class FormFun extends React.Component {
 
                 {this.state.showLocInfo &&
                     <>
-
                         <LocationInfo searchQuery={this.state.searchQuery} displayName={this.state.locationResult.display_name} lat={this.state.locationResult.lat} lon={this.state.locationResult.lon} />
-
                     </>
                 }
 
@@ -149,13 +139,10 @@ class FormFun extends React.Component {
                             return (
                                 <>
                                     <WeatherInfo key={index} city={this.state.searchQuery} description={value.description} date={value.date} />
-
                                 </>
                             )
                         })
                         }
-
-
                     </>
                 }
 
@@ -163,18 +150,13 @@ class FormFun extends React.Component {
                     <>
                         {this.state.movieData.map((value, index) => {
                             return (
-
                                 <MovieInfo key={index} city={this.state.searchQuery} title={value.title} overview={value.overview}
                                     avgvotes={value.avgvotes} votecount={value.votecount} imgUrl={value.imgUrl} popularity={value.popularity} released={value.released} />
-
                             )
                         })
                         }
-
-
                     </>
                 }
-
             </div>
         )
     }
